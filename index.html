@@ -130,7 +130,7 @@
     <script>
         // Script permanece igual
         let serverIP = '';
-        const serverUrl = '18.224.136.166:8081';
+        const serverUrl = 'http://192.168.0.36:8081';
 
         async function getServerIP() {
             try {
@@ -149,7 +149,7 @@
         async function updateFov() {
             try {
                 const fov = document.getElementById('fovInput').value;
-                const response = await fetch(`${serverUrl}/set_fov`, {
+                const response = await fetch(`${serverIP}/set_fov`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -167,7 +167,7 @@
 
         async function updateState(key, value) {
             try {
-                const response = await fetch(`${serverUrl}/set_state`, {
+                const response = await fetch(`${serverIP}/set_state`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -199,7 +199,7 @@
 
         async function setTargetArea(area) {
             try {
-                const response = await fetch(`${serverUrl}/set_state`, {
+                const response = await fetch(`${serverIP}/set_state`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
