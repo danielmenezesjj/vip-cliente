@@ -141,26 +141,26 @@
 <!-- Inclui o mesmo script do código original -->
 <script>
     // Script permanece igual
-    let serverIP = 'http://18.224.136.166:8081'; // Defina o IP diretamente ou obtenha de uma maneira confiável
+    // let serverIP = 'http://18.224.136.166:8081'; // Defina o IP diretamente ou obtenha de uma maneira confiável
 
-    async function getServerIP() {
-        try {
-            const response = await fetch('/get_ip'); // Certifique-se de que esta rota está correta
-            const result = await response.json();
-            serverIP = result.ip; // Use apenas o IP sem qualquer parte extra
-        } catch (error) {
-            document.getElementById('message').innerText = 'Error fetching server IP';
-        }
-    }
+    // async function getServerIP() {
+    //     try {
+    //         const response = await fetch('/get_ip'); // Certifique-se de que esta rota está correta
+    //         const result = await response.json();
+    //         serverIP = result.ip; // Use apenas o IP sem qualquer parte extra
+    //     } catch (error) {
+    //         document.getElementById('message').innerText = 'Error fetching server IP';
+    //     }
+    // }
 
-    window.onload = async () => {
-        await getServerIP(); // Esta função agora apenas define o serverIP corretamente
-    };
+    // window.onload = async () => {
+    //     await getServerIP(); // Esta função agora apenas define o serverIP corretamente
+    // };
 
     async function updateFov() {
         try {
             const fov = document.getElementById('fovInput').value;
-            const response = await fetch(`${serverIP}/set_fov`, { // Aqui a URL já usa o IP correto
+            const response = await fetch(`http://18.224.136.166:8081/set_fov`, { // Aqui a URL já usa o IP correto
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -178,7 +178,7 @@
 
     async function updateState(key, value) {
         try {
-            const response = await fetch(`${serverIP}/set_state`, { // Novamente, aqui a URL já está correta
+            const response = await fetch(`http://18.224.136.166:8081/set_state`, { // Novamente, aqui a URL já está correta
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
