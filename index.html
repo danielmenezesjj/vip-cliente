@@ -14,15 +14,19 @@
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: url('https://freedesignfile.com/upload/2022/10/Hacker-Esport-logo-design-vector.jpg') no-repeat center center fixed;
-            background-size: cover; /* Ajusta a imagem ao tamanho da tela */
-            color: #fff; /* Branco para textos */
+            background-size: cover;
+            /* Ajusta a imagem ao tamanho da tela */
+            color: #fff;
+            /* Branco para textos */
         }
 
         .container {
-            background: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente preto */
+            background: rgba(0, 0, 0, 0.8);
+            /* Fundo semi-transparente preto */
             padding: 2rem;
             border-radius: 5px;
-            border: 2px solid #fff; /* Bordas brancas */
+            border: 2px solid #fff;
+            /* Bordas brancas */
             text-align: center;
             width: 100%;
             max-width: 450px;
@@ -33,7 +37,8 @@
         h1 {
             margin-bottom: 1rem;
             font-size: 1.8rem;
-            color: #fff; /* Texto branco */
+            color: #fff;
+            /* Texto branco */
             text-transform: uppercase;
             font-weight: bold;
         }
@@ -42,17 +47,22 @@
             padding: 0.7rem;
             width: calc(100% - 1rem);
             margin-bottom: 1rem;
-            border: 2px solid #fff; /* Borda branca */
+            border: 2px solid #fff;
+            /* Borda branca */
             border-radius: 5px;
-            background: #222; /* Preto para inputs */
+            background: #222;
+            /* Preto para inputs */
             font-size: 1rem;
-            color: #fff; /* Texto branco */
+            color: #fff;
+            /* Texto branco */
         }
 
         button {
             padding: 0.7rem;
-            background: #e00; /* Vermelho para botões */
-            color: #fff; /* Texto branco */
+            background: #e00;
+            /* Vermelho para botões */
+            color: #fff;
+            /* Texto branco */
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -62,7 +72,8 @@
         }
 
         button:hover {
-            background: #ff0000; /* Vermelho mais claro ao passar o mouse */
+            background: #ff0000;
+            /* Vermelho mais claro ao passar o mouse */
             transform: scale(1.05);
         }
 
@@ -75,7 +86,8 @@
         .message {
             margin-top: 1rem;
             font-size: 0.9rem;
-            color: #ff0000; /* Vermelho para mensagens */
+            color: #ff0000;
+            /* Vermelho para mensagens */
         }
 
         @media (max-width: 600px) {
@@ -98,7 +110,7 @@
 <body>
     <div class="container">
         <h1>
-        PointBlank   Zepetto
+            PointBlank Zepetto
         </h1>
         <input type="number" id="fovInput" placeholder="Digite a FOV que você deseja">
         <button onclick="updateFov()">Atualizar FOV</button>
@@ -126,97 +138,73 @@
     </div>
 </body>
 
-    <!-- Inclui o mesmo script do código original -->
-    <script>
-        // Script permanece igual
-        let serverIP = '';
-        const serverUrl = 'http://192.168.0.36:8081';
+<!-- Inclui o mesmo script do código original -->
+<script>
+    // Script permanece igual
+    let serverIP = 'http://18.224.136.166:8081'; // Defina o IP diretamente ou obtenha de uma maneira confiável
 
-        async function getServerIP() {
-            try {
-                const response = await fetch('/get_ip');
-                const result = await response.json();
-                serverIP = result.ip;
-            } catch (error) {
-                document.getElementById('message').innerText = 'Error fetching server IP';
-            }
+    async function getServerIP() {
+        try {
+            const response = await fetch('/get_ip'); // Certifique-se de que esta rota está correta
+            const result = await response.json();
+            serverIP = result.ip; // Use apenas o IP sem qualquer parte extra
+        } catch (error) {
+            document.getElementById('message').innerText = 'Error fetching server IP';
         }
+    }
 
-        window.onload = async () => {
-            await getServerIP();
-        };
+    window.onload = async () => {
+        await getServerIP(); // Esta função agora apenas define o serverIP corretamente
+    };
 
-        async function updateFov() {
-            try {
-                const fov = document.getElementById('fovInput').value;
-                const response = await fetch(`${serverIP}/set_fov`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ fov: parseFloat(fov) })
-                });
-                const result = await response.json();
-                document.getElementById('message').innerText = result.message;
-                document.getElementById('fovStatus').innerText = 'FOV updated successfully';
-            } catch (error) {
-                document.getElementById('message').innerText = 'Error updating FOV';
-                document.getElementById('fovStatus').innerText = 'Error updating FOV';
-            }
+    async function updateFov() {
+        try {
+            const fov = document.getElementById('fovInput').value;
+            const response = await fetch(`${serverIP}/set_fov`, { // Aqui a URL já usa o IP correto
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ fov: parseFloat(fov) })
+            });
+            const result = await response.json();
+            document.getElementById('message').innerText = result.message;
+            document.getElementById('fovStatus').innerText = 'FOV updated successfully';
+        } catch (error) {
+            document.getElementById('message').innerText = 'Error updating FOV';
+            document.getElementById('fovStatus').innerText = 'Error updating FOV';
         }
+    }
 
-        async function updateState(key, value) {
-            try {
-                const response = await fetch(`${serverIP}/set_state`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ key, value })
-                });
-                const result = await response.json();
-                document.getElementById('message').innerText = result.message;
+    async function updateState(key, value) {
+        try {
+            const response = await fetch(`${serverIP}/set_state`, { // Novamente, aqui a URL já está correta
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ key, value })
+            });
+            const result = await response.json();
+            document.getElementById('message').innerText = result.message;
 
-                switch (key) {
-                    case 'bCrossAimbot':
-                        document.getElementById('aimlockStatus').innerText = value ? 'AimLock ON' : 'AimLock OFF';
-                        break;
-                    case 'bSilentAimbot':
-                        document.getElementById('superaimStatus').innerText = value ? 'SuperAim ON' : 'SuperAim OFF';
-                        break;
-                    case 'bRecoil':
-                        document.getElementById('recoilStatus').innerText = value ? 'Recoil ON' : 'Recoil OFF';
-                        break;
-                    case 'targetAim':
-                        document.getElementById('targetAim').innerText = value ? 'Dano ON' : 'Dano OFF';
-                        break;
-                }
-            } catch (error) {
-                console.error('Erro ao atualizar o estado:', error);
-                document.getElementById('message').innerText = 'Erro ao atualizar o estado.';
+            switch (key) {
+                case 'bCrossAimbot':
+                    document.getElementById('aimlockStatus').innerText = value ? 'AimLock ON' : 'AimLock OFF';
+                    break;
+                case 'bSilentAimbot':
+                    document.getElementById('superaimStatus').innerText = value ? 'SuperAim ON' : 'SuperAim OFF';
+                    break;
+                case 'bRecoil':
+                    document.getElementById('recoilStatus').innerText = value ? 'Recoil ON' : 'Recoil OFF';
+                    break;
             }
+        } catch (error) {
+            console.error('Erro ao atualizar o estado:', error);
+            document.getElementById('message').innerText = 'Erro ao atualizar o estado.';
         }
-
-        async function setTargetArea(area) {
-            try {
-                const response = await fetch(`${serverIP}/set_state`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ key: 'targetArea', value: area }),
-                });
-
-                const result = await response.json();
-                document.getElementById('message').innerText = result.message;
-
-                document.getElementById('targetAim').innerText = `Target Aim: ${area === 'Head' ? 'Cabeça' : 'Peito'}`;
-            } catch (error) {
-                console.error('Erro ao definir a área alvo:', error);
-                document.getElementById('message').innerText = 'Erro ao definir a área alvo.';
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 
 </html>
