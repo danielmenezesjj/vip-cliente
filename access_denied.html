@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Negado</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #d9534f;
+        }
+
+        .mac {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+                border-radius: 5px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Acesso Negado</h1>
+        <p class="message">Você não tem permissão para acessar esta página.</p>
+        <p class="mac">Seu endereço MAC: <span id="mac-address"></span></p>
+    </div>
+
+    <script>
+        // Extrair o endereço MAC da query string e exibir na página
+        const urlParams = new URLSearchParams(window.location.search);
+        const macAddress = urlParams.get('mac');
+        document.getElementById('mac-address').textContent = macAddress || 'Não disponível';
+    </script>
+</body>
+
+</html>

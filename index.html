@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações Vip</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://freedesignfile.com/upload/2022/10/Hacker-Esport-logo-design-vector.jpg') no-repeat center center fixed;
+            background-size: cover; /* Ajusta a imagem ao tamanho da tela */
+            color: #fff; /* Branco para textos */
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente preto */
+            padding: 2rem;
+            border-radius: 5px;
+            border: 2px solid #fff; /* Bordas brancas */
+            text-align: center;
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            color: #fff; /* Texto branco */
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 0.7rem;
+            width: calc(100% - 1rem);
+            margin-bottom: 1rem;
+            border: 2px solid #fff; /* Borda branca */
+            border-radius: 5px;
+            background: #222; /* Preto para inputs */
+            font-size: 1rem;
+            color: #fff; /* Texto branco */
+        }
+
+        button {
+            padding: 0.7rem;
+            background: #e00; /* Vermelho para botões */
+            color: #fff; /* Texto branco */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        button:hover {
+            background: #ff0000; /* Vermelho mais claro ao passar o mouse */
+            transform: scale(1.05);
+        }
+
+        .status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        .message {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #ff0000; /* Vermelho para mensagens */
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            input,
+            button {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>
+        PointBlank   Zepetto
+        </h1>
+        <input type="number" id="fovInput" placeholder="Digite a FOV que você deseja">
+        <button onclick="updateFov()">Atualizar FOV</button>
+        <div class="status" id="fovStatus"></div>
+
+        <h1>FOV</h1>
+        <button onclick="updateState('bSilentAimbot', true)">FOV ON</button>
+        <button onclick="updateState('bSilentAimbot', false)">FOV OFF</button>
+        <div class="status" id="superaimStatus"></div>
+
+        <h1>AimLock</h1>
+        <button onclick="updateState('bCrossAimbot', true)">AimLock ON</button>
+        <button onclick="updateState('bCrossAimbot', false)">AimLock OFF</button>
+        <div class="status" id="aimlockStatus"></div>
+
+        <h1>Recoil</h1>
+        <button onclick="updateState('bRecoil', true)">Recoil ON</button>
+        <button onclick="updateState('bRecoil', false)">Recoil OFF</button>
+        <div class="status" id="recoilStatus"></div>
+
+
+        <div class="status" id="superaimStatus"></div>
+
+        <div class="message" id="message"></div>
+    </div>
+</body>
+
+    <!-- Inclui o mesmo script do código original -->
+    <script>
+        // Script permanece igual
+        let serverIP = '';
+        const serverUrl = 'http://192.168.0.36:8081';
+
+        async function getServerIP() {
+            try {
+                const response = await fetch('/get_ip');
+                const result = await response.json();
+                serverIP = result.ip;
+            } catch (error) {
+                document.getElementById('message').innerText = 'Error fetching server IP';
+            }
+        }
+
+        window.onload = async () => {
+            await getServerIP();
+        };
+
+        async function updateFov() {
+            try {
+                const fov = document.getElementById('fovInput').value;
+                const response = await fetch(`${serverUrl}/set_fov`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fov: parseFloat(fov) })
+                });
+                const result = await response.json();
+                document.getElementById('message').innerText = result.message;
+                document.getElementById('fovStatus').innerText = 'FOV updated successfully';
+            } catch (error) {
+                document.getElementById('message').innerText = 'Error updating FOV';
+                document.getElementById('fovStatus').innerText = 'Error updating FOV';
+            }
+        }
+
+        async function updateState(key, value) {
+            try {
+                const response = await fetch(`${serverUrl}/set_state`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ key, value })
+                });
+                const result = await response.json();
+                document.getElementById('message').innerText = result.message;
+
+                switch (key) {
+                    case 'bCrossAimbot':
+                        document.getElementById('aimlockStatus').innerText = value ? 'AimLock ON' : 'AimLock OFF';
+                        break;
+                    case 'bSilentAimbot':
+                        document.getElementById('superaimStatus').innerText = value ? 'SuperAim ON' : 'SuperAim OFF';
+                        break;
+                    case 'bRecoil':
+                        document.getElementById('recoilStatus').innerText = value ? 'Recoil ON' : 'Recoil OFF';
+                        break;
+                    case 'targetAim':
+                        document.getElementById('targetAim').innerText = value ? 'Dano ON' : 'Dano OFF';
+                        break;
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar o estado:', error);
+                document.getElementById('message').innerText = 'Erro ao atualizar o estado.';
+            }
+        }
+
+        async function setTargetArea(area) {
+            try {
+                const response = await fetch(`${serverUrl}/set_state`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ key: 'targetArea', value: area }),
+                });
+
+                const result = await response.json();
+                document.getElementById('message').innerText = result.message;
+
+                document.getElementById('targetAim').innerText = `Target Aim: ${area === 'Head' ? 'Cabeça' : 'Peito'}`;
+            } catch (error) {
+                console.error('Erro ao definir a área alvo:', error);
+                document.getElementById('message').innerText = 'Erro ao definir a área alvo.';
+            }
+        }
+    </script>
+</body>
+
+</html>
